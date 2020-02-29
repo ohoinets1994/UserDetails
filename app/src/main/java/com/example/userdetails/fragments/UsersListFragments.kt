@@ -5,12 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userdetails.R
 import com.example.userdetails.adapters.UsersAdapter
+import com.example.userdetails.extentions.observe
+import com.example.userdetails.model.User
+import com.example.userdetails.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.fragment_users_list.*
 
 class UsersListFragments : Fragment() {
+    private lateinit var viewModel: UserViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -21,11 +26,17 @@ class UsersListFragments : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initRecyclerView()
+        viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
+
+        viewModel.apply {
+            observe(users) { initRecyclerView(it) }
+
+            loadUsers()
+        }
     }
 
-    private fun initRecyclerView() {
+    private fun initRecyclerView(users: List<User>) {
         rvUsersList.layoutManager = LinearLayoutManager(context)
-        rvUsersList.adapter = UsersAdapter()
+        rvUsersList.adapter = UsersAdapter(users)
     }
 }

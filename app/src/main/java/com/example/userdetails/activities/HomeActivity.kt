@@ -7,13 +7,12 @@ import com.example.userdetails.fragments.UsersListFragments
 
 class HomeActivity : AppCompatActivity() {
 
-    private val fragments = listOf(UsersListFragments())
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
         supportFragmentManager.beginTransaction().apply {
+            add(R.id.fragmentContainer, UsersListFragments())
             show(UsersListFragments())
             commit()
         }
