@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userdetails.R
+import com.example.userdetails.activities.UserDetailsActivity
 import com.example.userdetails.extentions.load
 import com.example.userdetails.model.User
 import kotlinx.android.synthetic.main.user_layout.view.*
@@ -20,12 +21,20 @@ class UsersAdapter(private val users: List<User>) :
     override fun onBindViewHolder(holder: UsersAdapter.ViewHolder, position: Int) =
         holder.bindUser(users[position])
 
-    class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         fun bindUser(user: User) {
-            view.apply {
+            itemView.apply {
                 imgAvatar.load(user.picture.large)
-                tvName.text = user.name.first
+                tvName.text = createUserName(user.name.first, user.name.last)
+
+                setOnClickListener { startUserDetailsActivity(user) }
             }
         }
+
+        private fun startUserDetailsActivity(user: User) {
+            itemView.context.startActivity(UserDetailsActivity.newIntent(itemView.context, user))
+        }
+
+        private fun createUserName(first: String, last: String): String = "$first $last"
     }
 }
