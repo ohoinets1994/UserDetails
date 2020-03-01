@@ -11,4 +11,7 @@ interface UserApi {
 
     @GET("api/")
     fun getMultipleUsers(@Query("results") items: Int = 20): Deferred<UserResponse>
+
+    @GET("api/")
+    fun getNextPageUsers(@Query("page") page: Int, @Query("results") items: Int = 20): Deferred<UserResponse>
 }

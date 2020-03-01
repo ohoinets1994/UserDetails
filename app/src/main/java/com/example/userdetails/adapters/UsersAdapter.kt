@@ -11,8 +11,12 @@ import com.example.userdetails.extentions.load
 import com.example.userdetails.model.User
 import kotlinx.android.synthetic.main.user_layout.view.*
 
-class UsersAdapter(private val users: List<User>) :
-    RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
+class UsersAdapter : RecyclerView.Adapter<UsersAdapter.ViewHolder>() {
+    var users: List<User> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersAdapter.ViewHolder =
         ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.user_layout, parent, false))

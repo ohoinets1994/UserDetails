@@ -3,8 +3,11 @@ package com.example.userdetails.extentions
 import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.example.userdetails.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.net.UnknownHostException
 
@@ -26,3 +29,18 @@ fun Throwable.getErrorMessage(context: Context): String =
     )
 
 fun fullName(first: String, last: String): String = "$first $last"
+
+inline fun CoroutineScope.load(
+    loading: MutableLiveData<Boolean>,
+    error: MutableLiveData<Throwable>,
+    crossinline action: suspend () -> Unit
+) = launch {
+    try {
+        loading.value = true
+        action()
+    } catch (e: Exception) {
+        error.postValue(e)
+    } finally {
+        loading.value = false
+    }
+}

@@ -11,12 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.userdetails.R
 import com.example.userdetails.adapters.UsersAdapter
 import com.example.userdetails.extentions.observe
-import com.example.userdetails.model.User
+import com.example.userdetails.extentions.scrollListener
 import com.example.userdetails.viewmodels.UserViewModel
 import kotlinx.android.synthetic.main.fragment_users_list.*
 
 class UsersListFragments : Fragment() {
     private lateinit var viewModel: UserViewModel
+    private val adapter = UsersAdapter()
+    private var nextPage: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,10 +29,14 @@ class UsersListFragments : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        rvUsersList.layoutManager = LinearLayoutManager(context)
+        rvUsersList.adapter = adapter
+
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
         viewModel.apply {
-            observe(users) { initRecyclerView(it) }
+            observe(users) { adapter.users = it }
+            observe(info) { nextPage = it.page }
             observe(loading) { evUsersList.setLoading(it) }
             observe(error) {
                 it?.let { error ->
@@ -44,10 +50,7 @@ class UsersListFragments : Fragment() {
 
             loadUsers()
         }
-    }
 
-    private fun initRecyclerView(users: List<User>) {
-        rvUsersList.layoutManager = LinearLayoutManager(context)
-        rvUsersList.adapter = UsersAdapter(users)
+        rvUsersList.scrollListener { nextPage?.let { viewModel.loadNextPageUsers(it) } }
     }
 }
