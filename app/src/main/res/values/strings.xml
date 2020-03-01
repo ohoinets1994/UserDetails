@@ -2,4 +2,7 @@
     <string name="app_name">UserDetails</string>
     <string name="home_screen">Home</string>
     <string name="profile_screen">Profile</string>
+    <string name="gender">Gender: %s</string>
+    <string name="dob">Date of birth: %s</string>
+    <string name="phone_number">Phone Number: %s</string>
 </resources>

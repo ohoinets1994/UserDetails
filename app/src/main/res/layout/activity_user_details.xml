@@ -63,14 +63,36 @@
         tools:text="Alice Gonzale" />
 
     <TextView
-        android:id="@+id/tvUserAge"
+        android:id="@+id/tvUserGender"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textSize="17sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvUserName"
-        tools:text="25 years old" />
+        tools:text="@string/gender" />
+
+    <TextView
+        android:id="@+id/tvUserDateOfBirth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="17sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvUserGender"
+        tools:text="@string/dob" />
+
+    <TextView
+        android:id="@+id/tvUserPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textSize="17sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvUserDateOfBirth"
+        tools:text="@string/phone_number" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.userdetails.R
 import com.example.userdetails.activities.UserDetailsActivity
+import com.example.userdetails.extentions.fullName
 import com.example.userdetails.extentions.load
 import com.example.userdetails.model.User
 import kotlinx.android.synthetic.main.user_layout.view.*
@@ -25,7 +26,7 @@ class UsersAdapter(private val users: List<User>) :
         fun bindUser(user: User) {
             itemView.apply {
                 imgAvatar.load(user.picture.large)
-                tvName.text = createUserName(user.name.first, user.name.last)
+                tvName.text = fullName(user.name.first, user.name.last)
 
                 setOnClickListener { startUserDetailsActivity(user) }
             }
@@ -34,7 +35,5 @@ class UsersAdapter(private val users: List<User>) :
         private fun startUserDetailsActivity(user: User) {
             itemView.context.startActivity(UserDetailsActivity.newIntent(itemView.context, user))
         }
-
-        private fun createUserName(first: String, last: String): String = "$first $last"
     }
 }
