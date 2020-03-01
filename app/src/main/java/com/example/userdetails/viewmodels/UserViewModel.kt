@@ -14,13 +14,18 @@ class UserViewModel : ViewModel(), CoroutineScope {
         get() = Dispatchers.Main
 
     val users = MutableLiveData<List<User>>()
+    val loading = MutableLiveData<Boolean>()
+    val error = MutableLiveData<Throwable>()
 
     fun loadUsers() = launch {
+        loading.value = true
         try {
             val userList = NetworkService.api.getMultipleUsers().await().results
             users.postValue(userList)
+            loading.postValue(false)
         } catch (e: Exception) {
-            e.printStackTrace()
+            loading.postValue(false)
+            error.postValue(e)
         }
     }
 }

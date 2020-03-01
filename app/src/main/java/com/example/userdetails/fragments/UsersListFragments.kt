@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +31,16 @@ class UsersListFragments : Fragment() {
 
         viewModel.apply {
             observe(users) { initRecyclerView(it) }
+            observe(loading) { evUsersList.setLoading(it) }
+            observe(error) {
+                it?.let { error ->
+                    rvUsersList.isVisible = false
+                    evUsersList.setError(error)
+                } ?: run {
+                    rvUsersList.isVisible = true
+                    evUsersList.hideError()
+                }
+            }
 
             loadUsers()
         }
