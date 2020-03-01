@@ -35,9 +35,16 @@ class UsersListFragments : Fragment() {
         viewModel = ViewModelProviders.of(this).get(UserViewModel::class.java)
 
         viewModel.apply {
-            observe(users) { adapter.users = it }
+            srlCharactersList.setOnRefreshListener { loadUsers() }
+            evUsersList.onRetryClicked = { loadUsers() }
+
+            observe(users) {
+                rvUsersList.isVisible = true
+                adapter.users = it
+                evUsersList.hideError()
+            }
             observe(info) { nextPage = it.page }
-            observe(loading) { evUsersList.setLoading(it) }
+            observe(loading) { evUsersList.setLoading(srlCharactersList, it) }
             observe(error) {
                 it?.let { error ->
                     rvUsersList.isVisible = false

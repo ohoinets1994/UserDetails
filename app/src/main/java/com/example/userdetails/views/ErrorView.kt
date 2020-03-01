@@ -5,12 +5,15 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.userdetails.R
 import com.example.userdetails.extentions.getErrorMessage
 import kotlinx.android.synthetic.main.layout_error_message.view.*
 
 class ErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) :
     FrameLayout(context, attrs, defStyleAttr) {
+    var onRetryClicked: (() -> Unit)? = null
+        set(value) = btnErrorRetry.setOnClickListener { value?.invoke() }
 
     private var shouldShowError = false
 
@@ -30,10 +33,11 @@ class ErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         ta.recycle()
     }
 
-    fun setLoading(isLoading: Boolean) {
+    fun setLoading(srl: SwipeRefreshLayout, isLoading: Boolean) {
         if (isLoading) {
-            showLoading()
+            if (!srl.isRefreshing) showLoading()
         } else {
+            srl.isRefreshing = false
             hideLoading()
         }
     }
@@ -46,6 +50,7 @@ class ErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         isVisible = true
         pbErrorLoading.isVisible = true
         tvErrorMessage.isVisible = shouldShowError
+        btnErrorRetry.isVisible = shouldShowError
     }
 
     fun hideLoading() {
@@ -57,10 +62,12 @@ class ErrorView @JvmOverloads constructor(context: Context, attrs: AttributeSet?
         isVisible = true
         pbErrorLoading.isVisible = false
         tvErrorMessage.isVisible = true
+        btnErrorRetry.isVisible = true
     }
 
     fun hideError() {
         shouldShowError = false
         tvErrorMessage.isVisible = false
+        btnErrorRetry.isVisible = false
     }
 }
